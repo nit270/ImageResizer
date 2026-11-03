@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Govt & Exam Portal Signature / Photo Resizer & Padder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            portal: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0369a1',
+              700: '#075985',
+              800: '#0c4a6e',
+              900: '#082f49',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbar and subtle grid patterns */
+    .bg-grid-pattern {
+      background-size: 24px 24px;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.2) 1px, transparent 1px);
+    }
+    .dark .bg-grid-pattern {
+      background-image: radial-gradient(rgba(51, 65, 85, 0.4) 1px, transparent 1px);
+    }
+    .checker-bg {
+      background-color: #f8fafc;
+      background-image: 
+        linear-gradient(45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(-45deg, #e2e8f0 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #e2e8f0 75%), 
+        linear-gradient(-45deg, transparent 75%, #e2e8f0 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
+    }
+    .dark .checker-bg {
+      background-color: #0f172a;
+      background-image: 
+        linear-gradient(45deg, #1e293b 25%, transparent 25%), 
+        linear-gradient(-45deg, #1e293b 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #1e293b 75%), 
+        linear-gradient(-45deg, transparent 75%, #1e293b 75%);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col font-sans antialiased transition-colors duration-200">
+
+  <!-- Header -->
+  <header class="border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-sky-500/20">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold leading-none text-slate-900 dark:text-white flex items-center gap-2">
+            ExamSign <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-sky-100 text-sky-800 dark:bg-sky-950/80 dark:text-sky-300 border border-sky-300 dark:border-sky-800">Govt Portal Compliant</span>
+          </h1>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Target Dimension & Exact KB Size Padder (30KB – 50KB)</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <!-- Preset Quick Bar -->
+        <span class="hidden sm:inline-flex text-xs font-medium text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 px-3 py-1 rounded-full items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          100% Client-Side Private
+        </span>
+        <button id="themeToggle" class="p-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400">
+          <!-- Sun / Moon icons -->
+          <svg id="sunIcon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path></svg>
+          <svg id="moonIcon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Banner -->
+  <div class="bg-gradient-to-r from-sky-500/10 via-indigo-500/10 to-sky-500/10 border-b border-sky-200 dark:border-sky-900/50 py-2 px-4 text-center text-xs text-sky-800 dark:text-sky-300">
+    Designed for <strong>UPSC, SSC, IBPS, RRB, State PSC & NTA</strong> entrance portals requiring strict dimensions (e.g. 140x60px) and minimum file limits (30KB–50KB).
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 space-y-6">
+
+    <!-- Upload Card & Drag and Drop Zone -->
+    <div id="dropZone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 hover:border-sky-500 dark:hover:border-sky-500 rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all bg-white dark:bg-slate-900 shadow-sm relative group">
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp,image/jpg" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+      <div class="flex flex-col items-center justify-center space-y-3 pointer-events-none">
+        <div class="w-14 h-14 rounded-2xl bg-sky-50 dark:bg-sky-950 flex items-center justify-center text-sky-600 dark:text-sky-400 group-hover:scale-105 transition-transform">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+          </svg>
+        </div>
+        <div>
+          <p class="text-sm sm:text-base font-semibold text-slate-700 dark:text-slate-200">
+            Click to upload your signature/photo, or drag and drop here
+          </p>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            Supports JPG, JPEG, PNG, WEBP. Your files never leave your device.
+          </p>
+        </div>
+        <div class="flex flex-wrap items-center justify-center gap-2 pt-2">
+          <button type="button" id="loadSampleBtn" class="pointer-events-auto text-xs font-medium px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition">
+            ✍️ Load Sample Signature ("Nitish Kumar")
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Workspace (Editor + Output) -->
+    <div id="workspace" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- Left Column: Interactive Cropper, Tuning & Presets (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <!-- Cropper Viewport Card -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h2 class="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              Crop & Position Viewport
+            </h2>
+            <div class="flex items-center gap-1">
+              <button id="resetCropBtn" title="Reset Crop & View" class="px-2.5 py-1 text-xs font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-md transition">
+                Reset View
+              </button>
+            </div>
+          </div>
+
+          <!-- Canvas Interactive Stage -->
+          <div class="relative w-full h-80 rounded-xl overflow-hidden checker-bg border border-slate-200 dark:border-slate-800 flex items-center justify-center select-none cursor-move" id="stageContainer">
+            <canvas id="cropCanvas" class="max-w-full max-h-full"></canvas>
+            
+            <div class="absolute bottom-2 left-2 pointer-events-none bg-slate-900/70 text-white text-[11px] px-2 py-1 rounded backdrop-blur-sm">
+              Drag image to pan • Scroll to zoom • Drag crop handles to fit
+            </div>
+          </div>
+
+          <!-- Quick presets buttons -->
+          <div class="space-y-2">
+            <label class="text-xs font-semibold text-slate-600 dark:text-slate-400 block">Preset Requirements:</label>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <button data-preset="signature-140-60" class="preset-btn px-3 py-2 text-xs font-medium rounded-xl border border-sky-500/50 bg-sky-50/50 dark:bg-sky-950/30 text-sky-700 dark:text-sky-300 text-left transition hover:border-sky-500">
+                <span class="block font-bold">Signature (Std)</span>
+                <span class="text-[10px] opacity-80">140 x 60 px (7:3)</span>
+              </button>
+              <button data-preset="signature-50-20" class="preset-btn px-3 py-2 text-xs font-medium rounded-xl border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 text-left transition">
+                <span class="block font-bold">50mm x 20mm</span>
+                <span class="text-[10px] opacity-80">50 x 20 box (2.5:1)</span>
+              </button>
+              <button data-preset="photo-ssc" class="preset-btn px-3 py-2 text-xs font-medium rounded-xl border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 text-left transition">
+                <span class="block font-bold">Passport Photo</span>
+                <span class="text-[10px] opacity-80">200 x 230 px (3.5x4.5)</span>
+              </button>
+              <button data-preset="square" class="preset-btn px-3 py-2 text-xs font-medium rounded-xl border border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 text-left transition">
+                <span class="block font-bold">Square 1:1</span>
+                <span class="text-[10px] opacity-80">200 x 200 px</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive View Zoom/Rotate Bar -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-500 dark:text-slate-400 font-medium w-14">Zoom:</span>
+              <input type="range" id="zoomRange" min="0.2" max="3" step="0.05" value="1" class="w-full accent-sky-500" />
+              <span id="zoomVal" class="font-mono text-slate-700 dark:text-slate-300 w-10 text-right">1.0x</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="text-slate-500 dark:text-slate-400 font-medium w-14">Rotate:</span>
+              <button id="rotateLeftBtn" class="p-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-mono text-xs px-2">⟲ 90°</button>
+              <button id="rotateRightBtn" class="p-1 rounded bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-mono text-xs px-2">⟳ 90°</button>
+              <span id="rotateVal" class="font-mono text-slate-700 dark:text-slate-300 text-right flex-1">0°</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enhance & Signature Paper Cleaner Filters -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path></svg>
+              Paper Cleaning & Black Ink Filter
+            </h3>
+            <span class="text-[11px] text-slate-500">Transforms faint blue ink into deep black on clear paper</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div>
+              <div class="flex justify-between mb-1">
+                <label for="contrastRange" class="font-semibold text-slate-700 dark:text-slate-300">Contrast</label>
+                <span id="contrastVal" class="font-mono text-slate-500">120%</span>
+              </div>
+              <input type="range" id="contrastRange" min="50" max="250" value="120" class="w-full accent-sky-500" />
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label for="brightnessRange" class="font-semibold text-slate-700 dark:text-slate-300">Brightness</label>
+                <span id="brightnessVal" class="font-mono text-slate-500">105%</span>
+              </div>
+              <input type="range" id="brightnessRange" min="50" max="200" value="105" class="w-full accent-sky-500" />
+            </div>
+
+            <div>
+              <div class="flex justify-between mb-1">
+                <label for="thresholdRange" class="font-semibold text-slate-700 dark:text-slate-300">Black/White Threshold</label>
+                <span id="thresholdVal" class="font-mono text-slate-500">Off</span>
+              </div>
+              <input type="range" id="thresholdRange" min="0" max="255" value="0" class="w-full accent-sky-500" />
+              <p class="text-[10px] text-slate-400 mt-0.5">Slide right to force paper to crisp 100% white</p>
+            </div>
+
+            <div class="flex flex-col justify-end space-y-2">
+              <label class="flex items-center space-x-2 cursor-pointer select-none">
+                <input type="checkbox" id="greyscaleCheck" class="rounded text-sky-600 focus:ring-sky-500 w-4 h-4" checked />
+                <span class="font-semibold text-slate-700 dark:text-slate-300">Force Pure Black & White / Grayscale</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer select-none">
+                <input type="checkbox" id="drawBorderCheck" class="rounded text-sky-600 focus:ring-sky-500 w-4 h-4" />
+                <span class="font-semibold text-slate-700 dark:text-slate-300">Draw outer box boundary (50x20mm)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Dimensions, File Size Padding & Final Export (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Target Dimension Settings Card -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+              Exact Output Dimensions
+            </h3>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Strict Match</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div>
+              <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Width (pixels)</label>
+              <input type="number" id="targetWidth" value="140" min="20" max="2400" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-mono text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+            </div>
+            <div>
+              <label class="block font-semibold text-slate-700 dark:text-slate-300 mb-1">Height (pixels)</label>
+              <input type="number" id="targetHeight" value="60" min="20" max="2400" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-mono text-sm focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs text-slate-500 pt-1">
+            <span class="flex items-center gap-1.5">
+              <input type="checkbox" id="lockAspectCheck" class="rounded text-sky-600 focus:ring-sky-500 w-4 h-4" checked />
+              <label for="lockAspectCheck" class="cursor-pointer font-medium text-slate-700 dark:text-slate-300">Lock Crop Box Aspect Ratio</label>
+            </span>
+            <span id="aspectRatioDisplay" class="font-mono text-slate-400">7:3 (2.33:1)</span>
+          </div>
+        </div>
+
+        <!-- Guaranteed File Size Padder Card (The Core Innovation) -->
+        <div class="bg-white dark:bg-slate-900 border-2 border-indigo-500/30 dark:border-indigo-500/40 rounded-2xl p-5 shadow-md shadow-indigo-500/5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              File Size Padder & Optimizer
+            </h3>
+            <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
+              Safe COM-Padding
+            </span>
+          </div>
+
+          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+            A small 140x60 image naturally compresses to <strong>3–6 KB</strong>. Portals demanding <strong>30KB–50KB</strong> will reject it! This tool safely injects clean binary bytes into the JPEG <code class="font-mono text-indigo-600 dark:text-indigo-400 font-bold">0xFF 0xFE</code> (Comment Marker) right before the end marker <code class="font-mono text-indigo-600 dark:text-indigo-400 font-bold">0xFF 0xD9</code>, satisfying validation.
+          </p>
+
+          <div class="space-y-3 pt-1">
+            <div class="flex justify-between items-center text-xs">
+              <label class="font-semibold text-slate-700 dark:text-slate-300">Target Output File Size</label>
+              <div class="flex items-center gap-1">
+                <input type="number" id="targetKbInput" min="5" max="200" value="36" class="w-16 px-2 py-1 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-mono text-xs text-right font-bold focus:ring-1 focus:ring-indigo-500" />
+                <span class="font-mono font-medium text-slate-500">KB</span>
+              </div>
+            </div>
+
+            <!-- Size Slider -->
+            <input type="range" id="sizeRange" min="30" max="49" value="36" step="1" class="w-full accent-indigo-600" />
+
+            <div class="flex justify-between text-[11px] text-slate-400 font-mono">
+              <span class="text-amber-500 font-semibold">Min: 30 KB</span>
+              <span class="text-emerald-500 font-semibold">Recommended: 35-40 KB</span>
+              <span class="text-red-400 font-semibold">Max: 49 KB</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Live Output Preview & Verification Card -->
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 flex items-center gap-2">
+              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Live Output & Verification
+            </h3>
+            <span id="complianceBadge" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1">
+              ✓ Portal Compliant
+            </span>
+          </div>
+
+          <!-- Exact Output Render View -->
+          <div class="flex flex-col items-center justify-center p-4 rounded-xl bg-slate-100 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 space-y-3">
+            <span class="text-[10px] uppercase font-semibold text-slate-400 tracking-wider">1:1 Actual Pixel Preview</span>
+            <div class="p-2 border border-slate-300 dark:border-slate-700 bg-white shadow-sm rounded-lg flex items-center justify-center">
+              <img id="finalPreviewImg" alt="Processed Signature Preview" class="shadow-inner" />
+            </div>
+            <span class="text-[11px] text-slate-500 text-center">Will be saved strictly as JPEG format</span>
+          </div>
+
+          <!-- Verification Metrics Grid -->
+          <div class="grid grid-cols-2 gap-2 text-xs font-mono">
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] block text-slate-400 uppercase font-sans">Dimensions</span>
+              <span id="metricDims" class="font-bold text-slate-800 dark:text-slate-200">140 x 60 px</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] block text-slate-400 uppercase font-sans">Final File Size</span>
+              <span id="metricSize" class="font-bold text-emerald-600 dark:text-emerald-400">36.00 KB</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] block text-slate-400 uppercase font-sans">Exact Bytes</span>
+              <span id="metricBytes" class="font-bold text-slate-800 dark:text-slate-200">36,864 bytes</span>
+            </div>
+            <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <span class="text-[10px] block text-slate-400 uppercase font-sans">Encoding</span>
+              <span class="font-bold text-slate-800 dark:text-slate-200">JPEG (COM-Padded)</span>
+            </div>
+          </div>
+
+          <!-- Download Action Area -->
+          <div class="space-y-2 pt-2">
+            <button id="downloadBtn" class="w-full py-3 px-4 rounded-xl font-bold text-sm bg-gradient-to-r from-sky-600 via-indigo-600 to-sky-600 hover:from-sky-500 hover:to-indigo-500 text-white shadow-lg shadow-sky-600/25 flex items-center justify-center gap-2 transition active:scale-[0.99]">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              </svg>
+              Download Verified JPG (<span id="downloadSizeLabel">36 KB</span>)
+            </button>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 px-1">
+              <span>File name: <input type="text" id="fileNameInput" value="signature_140x60.jpg" class="bg-transparent border-b border-slate-300 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-1 font-mono focus:outline-none" /></span>
+              <span>Ready for portal upload</span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Instructions & Checklist Accordion -->
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm space-y-4">
+      <h4 class="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+        <svg class="w-4 h-4 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        Official Portal Guidelines Checklist (SSC / UPSC / IBPS)
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-600 dark:text-slate-400">
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
+          <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">✍️ Handwriting Style</p>
+          <p>Must be in continuous running/cursive handwriting. Capital or disjointed block letters are immediately rejected by exam authorities.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
+          <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">📐 Exact 140x60 px Box</p>
+          <p>Standard 50mm x 20mm box translates to 140 x 60 pixels at standard web resolution. Do not upload high-res uncropped photos.</p>
+        </div>
+        <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
+          <p class="font-bold text-slate-700 dark:text-slate-300 mb-1">💾 Strict 30 KB - 50 KB</p>
+          <p>Portals check file sizes via server scripts. Our JPEG Comment padding technique guarantees validation passes every time.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-400 mt-12">
+    Exam & Portal Image Optimizer • Runs 100% locally in your browser. No files uploaded to any server.
+  </footer>
+
+  <!-- Embedded Logic & Binary Manipulations -->
+  <script>
+    // State Management
+    let sourceImage = null;
+    let imageLoaded = false;
+    let rotationDeg = 0;
+    let zoomLevel = 1.0;
+    
+    // Pan offset for image relative to canvas center
+    let panX = 0;
+    let panY = 0;
+    let isDragging = false;
+    let startDragX = 0;
+    let startDragY = 0;
+
+    // Crop box coordinates in viewport canvas space
+    let cropBox = {
+      x: 40,
+      y: 40,
+      w: 280,
+      h: 120,
+    };
+    let activeHandle = null; // 'center', 'tl', 'tr', 'bl', 'br', 'move'
+    let isCropDragging = false;
+    let cropStart = { x: 0, y: 0, boxX: 0, boxY: 0, boxW: 0, boxH: 0 };
+
+    // Final generated binary blob
+    let currentBlob = null;
+    let currentBlobUrl = null;
+
+    // Elements
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const loadSampleBtn = document.getElementById('loadSampleBtn');
+    const cropCanvas = document.getElementById('cropCanvas');
+    const ctx = cropCanvas.getContext('2d');
+    const stageContainer = document.getElementById('stageContainer');
+
+    const targetWidthInput = document.getElementById('targetWidth');
+    const targetHeightInput = document.getElementById('targetHeight');
+    const lockAspectCheck = document.getElementById('lockAspectCheck');
+    const aspectRatioDisplay = document.getElementById('aspectRatioDisplay');
+
+    const targetKbInput = document.getElementById('targetKbInput');
+    const sizeRange = document.getElementById('sizeRange');
+
+    const contrastRange = document.getElementById('contrastRange');
+    const contrastVal = document.getElementById('contrastVal');
+    const brightnessRange = document.getElementById('brightnessRange');
+    const brightnessVal = document.getElementById('brightnessVal');
+    const thresholdRange = document.getElementById('thresholdRange');
+    const thresholdVal = document.getElementById('thresholdVal');
+    const greyscaleCheck = document.getElementById('greyscaleCheck');
+    const drawBorderCheck = document.getElementById('drawBorderCheck');
+
+    const zoomRange = document.getElementById('zoomRange');
+    const zoomVal = document.getElementById('zoomVal');
+    const rotateLeftBtn = document.getElementById('rotateLeftBtn');
+    const rotateRightBtn = document.getElementById('rotateRightBtn');
+    const rotateVal = document.getElementById('rotateVal');
+    const resetCropBtn = document.getElementById('resetCropBtn');
+
+    const finalPreviewImg = document.getElementById('finalPreviewImg');
+    const metricDims = document.getElementById('metricDims');
+    const metricSize = document.getElementById('metricSize');
+    const metricBytes = document.getElementById('metricBytes');
+    const downloadSizeLabel = document.getElementById('downloadSizeLabel');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const fileNameInput = document.getElementById('fileNameInput');
+    const complianceBadge = document.getElementById('complianceBadge');
+
+    // Dark Mode Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const sunIcon = document.getElementById('sunIcon');
+    const moonIcon = document.getElementById('moonIcon');
+
+    function initTheme() {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.documentElement.classList.add('dark');
+        sunIcon.classList.remove('hidden');
+        moonIcon.classList.add('hidden');
+      }
+    }
+    initTheme();
+
+    themeToggle.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      const isDark = document.documentElement.classList.contains('dark');
+      sunIcon.classList.toggle('hidden', !isDark);
+      moonIcon.classList.toggle('hidden', isDark);
+    });
+
+    // Handle Window Resizing for Canvas Viewport
+    function resizeViewportCanvas() {
+      const rect = stageContainer.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      cropCanvas.width = rect.width * dpr;
+      cropCanvas.height = rect.height * dpr;
+      cropCanvas.style.width = `${rect.width}px`;
+      cropCanvas.style.height = `${rect.height}px`;
+      ctx.scale(dpr, dpr);
+      renderViewport();
+    }
+    window.addEventListener('resize', resizeViewportCanvas);
+
+    // Synchronize Size Controls
+    sizeRange.addEventListener('input', (e) => {
+      targetKbInput.value = e.target.value;
+      scheduleProcess();
+    });
+    targetKbInput.addEventListener('input', (e) => {
+      let val = parseInt(e.target.value) || 35;
+      if (val < 5) val = 5;
+      if (val > 200) val = 200;
+      sizeRange.value = Math.min(Math.max(val, 30), 49);
+      scheduleProcess();
+    });
+
+    // Dimension Inputs
+    targetWidthInput.addEventListener('input', handleDimensionChange);
+    targetHeightInput.addEventListener('input', handleDimensionChange);
+
+    function handleDimensionChange() {
+      const w = parseInt(targetWidthInput.value) || 140;
+      const h = parseInt(targetHeightInput.value) || 60;
+      const gcdVal = gcd(w, h);
+      aspectRatioDisplay.textContent = `${w / gcdVal}:${h / gcdVal} (${(w / h).toFixed(2)}:1)`;
+      
+      if (lockAspectCheck.checked) {
+        // adjust cropBox height to reflect aspect
+        cropBox.h = cropBox.w * (h / w);
+      }
+      renderViewport();
+      scheduleProcess();
+    }
+
+    function gcd(a, b) {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+
+    // Filter Listeners
+    contrastRange.addEventListener('input', () => {
+      contrastVal.textContent = `${contrastRange.value}%`;
+      scheduleProcess();
+    });
+    brightnessRange.addEventListener('input', () => {
+      brightnessVal.textContent = `${brightnessRange.value}%`;
+      scheduleProcess();
+    });
+    thresholdRange.addEventListener('input', () => {
+      thresholdVal.textContent = thresholdRange.value === '0' ? 'Off' : thresholdRange.value;
+      scheduleProcess();
+    });
+    greyscaleCheck.addEventListener('change', scheduleProcess);
+    drawBorderCheck.addEventListener('change', scheduleProcess);
+
+    // Zoom & Rotate Listeners
+    zoomRange.addEventListener('input', () => {
+      zoomLevel = parseFloat(zoomRange.value);
+      zoomVal.textContent = `${zoomLevel.toFixed(2)}x`;
+      renderViewport();
+      scheduleProcess();
+    });
+
+    rotateLeftBtn.addEventListener('click', () => {
+      rotationDeg = (rotationDeg - 90) % 360;
+      rotateVal.textContent = `${rotationDeg}°`;
+      renderViewport();
+      scheduleProcess();
+    });
+    rotateRightBtn.addEventListener('click', () => {
+      rotationDeg = (rotationDeg + 90) % 360;
+      rotateVal.textContent = `${rotationDeg}°`;
+      renderViewport();
+      scheduleProcess();
+    });
+
+    resetCropBtn.addEventListener('click', resetViewAndCrop);
+
+    function resetViewAndCrop() {
+      rotationDeg = 0;
+      rotateVal.textContent = '0°';
+      zoomLevel = 1.0;
+      zoomRange.value = 1.0;
+      zoomVal.textContent = '1.0x';
+      panX = 0;
+      panY = 0;
+      centerCropBox();
+      renderViewport();
+      scheduleProcess();
+    }
+
+    // Preset Buttons
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.preset-btn').forEach(b => {
+          b.classList.remove('border-sky-500', 'bg-sky-50/50', 'dark:bg-sky-950/30', 'text-sky-700', 'dark:text-sky-300');
+          b.classList.add('border-slate-200', 'dark:border-slate-800', 'text-slate-700', 'dark:text-slate-300');
+        });
+        btn.classList.add('border-sky-500', 'bg-sky-50/50', 'dark:bg-sky-950/30', 'text-sky-700', 'dark:text-sky-300');
+
+        const preset = btn.getAttribute('data-preset');
+        if (preset === 'signature-140-60' || preset === 'signature-50-20') {
+          targetWidthInput.value = 140;
+          targetHeightInput.value = 60;
+          drawBorderCheck.checked = preset === 'signature-50-20';
+        } else if (preset === 'photo-ssc') {
+          targetWidthInput.value = 200;
+          targetHeightInput.value = 230;
+          drawBorderCheck.checked = false;
+        } else if (preset === 'square') {
+          targetWidthInput.value = 200;
+          targetHeightInput.value = 200;
+          drawBorderCheck.checked = false;
+        }
+        handleDimensionChange();
+      });
+    });
+
+    // File Upload Handlers
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        loadFile(e.target.files[0]);
+      }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('border-sky-500', 'bg-sky-50/20');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('border-sky-500', 'bg-sky-50/20');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-sky-500', 'bg-sky-50/20');
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+        loadFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    function loadFile(file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          sourceImage = img;
+          imageLoaded = true;
+          fileNameInput.value = file.name.replace(/\.[^/.]+$/, "") + "_140x60.jpg";
+          resetViewAndCrop();
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Generate synthesized realistic cursive "Nitish Kumar" sample signature
+    loadSampleBtn.addEventListener('click', () => {
+      const sampleCanvas = document.createElement('canvas');
+      sampleCanvas.width = 700;
+      sampleCanvas.height = 300;
+      const sCtx = sampleCanvas.getContext('2d');
+
+      // Realistic warm cream paper background
+      sCtx.fillStyle = '#f8f8f6';
+      sCtx.fillRect(0, 0, 700, 300);
+
+      // Subtle paper fibers/noise
+      for (let i = 0; i < 400; i++) {
+        sCtx.fillStyle = Math.random() > 0.5 ? 'rgba(0,0,0,0.015)' : 'rgba(255,255,255,0.04)';
+        sCtx.fillRect(Math.random() * 700, Math.random() * 300, 1.5, 1.5);
+      }
+
+      // 50mm x 20mm outer bounding box
+      sCtx.lineWidth = 3;
+      sCtx.strokeStyle = '#222222';
+      sCtx.strokeRect(40, 35, 620, 230);
+
+      // Render Cursive Handwriting
+      sCtx.font = 'italic 74px "Brush Script MT", "Segoe Script", "Dancing Script", cursive';
+      sCtx.fillStyle = '#111827';
+      sCtx.textAlign = 'center';
+      sCtx.textBaseline = 'middle';
+      sCtx.fillText('Nitish Kumar', 350, 150);
+
+      // Optional slight pen slant flourish
+      sCtx.beginPath();
+      sCtx.lineWidth = 2.5;
+      sCtx.lineCap = 'round';
+      sCtx.moveTo(120, 195);
+      sCtx.quadraticCurveTo(350, 215, 580, 190);
+      sCtx.stroke();
+
+      const img = new Image();
+      img.onload = () => {
+        sourceImage = img;
+        imageLoaded = true;
+        fileNameInput.value = 'Nitish_Kumar_Signature_140x60.jpg';
+        resetViewAndCrop();
+      };
+      img.src = sampleCanvas.toDataURL('image/jpeg', 0.95);
+    });
+
+    // Center Crop Box in Viewport
+    function centerCropBox() {
+      const rect = stageContainer.getBoundingClientRect();
+      const targetW = parseInt(targetWidthInput.value) || 140;
+      const targetH = parseInt(targetHeightInput.value) || 60;
+      const targetRatio = targetW / targetH;
+
+      let boxW = rect.width * 0.7;
+      let boxH = boxW / targetRatio;
+
+      if (boxH > rect.height * 0.7) {
+        boxH = rect.height * 0.7;
+        boxW = boxH * targetRatio;
+      }
+
+      cropBox = {
+        x: (rect.width - boxW) / 2,
+        y: (rect.height - boxH) / 2,
+        w: boxW,
+        h: boxH
+      };
+    }
+
+    // Viewport Interactive Canvas Rendering
+    function renderViewport() {
+      const rect = stageContainer.getBoundingClientRect();
+      const w = rect.width;
+      const h = rect.height;
+
+      ctx.clearRect(0, 0, w, h);
+
+      if (!imageLoaded || !sourceImage) {
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '13px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('Upload an image above or click "Load Sample Signature"', w / 2, h / 2);
+        return;
+      }
+
+      ctx.save();
+      // Apply center transformation
+      ctx.translate(w / 2 + panX, h / 2 + panY);
+      ctx.rotate((rotationDeg * Math.PI) / 180);
+      ctx.scale(zoomLevel, zoomLevel);
+
+      // Center image
+      const imgW = sourceImage.width;
+      const imgH = sourceImage.height;
+      ctx.drawImage(sourceImage, -imgW / 2, -imgH / 2, imgW, imgH);
+      ctx.restore();
+
+      // Render Darkened Vignette Outside Crop Area
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.6)';
+      ctx.beginPath();
+      ctx.rect(0, 0, w, h);
+      ctx.rect(cropBox.x + cropBox.w, cropBox.y, -cropBox.w, cropBox.h); // cutout
+      ctx.fill('evenodd');
+
+      // Crop Bounding Box Stroke
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#0284c7';
+      ctx.strokeRect(cropBox.x, cropBox.y, cropBox.w, cropBox.h);
+
+      // Rule of thirds grid
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+      ctx.beginPath();
+      // Verticals
+      ctx.moveTo(cropBox.x + cropBox.w / 3, cropBox.y);
+      ctx.lineTo(cropBox.x + cropBox.w / 3, cropBox.y + cropBox.h);
+      ctx.moveTo(cropBox.x + (2 * cropBox.w) / 3, cropBox.y);
+      ctx.lineTo(cropBox.x + (2 * cropBox.w) / 3, cropBox.y + cropBox.h);
+      // Horizontals
+      ctx.moveTo(cropBox.x, cropBox.y + cropBox.h / 3);
+      ctx.lineTo(cropBox.x + cropBox.w, cropBox.y + cropBox.h / 3);
+      ctx.moveTo(cropBox.x, cropBox.y + (2 * cropBox.h) / 3);
+      ctx.lineTo(cropBox.x + cropBox.w, cropBox.y + (2 * cropBox.h) / 3);
+      ctx.stroke();
+
+      // Draw handles
+      const handleSize = 10;
+      ctx.fillStyle = '#ffffff';
+      ctx.strokeStyle = '#0284c7';
+      ctx.lineWidth = 2;
+
+      const handles = [
+        { x: cropBox.x, y: cropBox.y }, // tl
+        { x: cropBox.x + cropBox.w, y: cropBox.y }, // tr
+        { x: cropBox.x, y: cropBox.y + cropBox.h }, // bl
+        { x: cropBox.x + cropBox.w, y: cropBox.y + cropBox.h }, // br
+      ];
+
+      handles.forEach(h => {
+        ctx.fillRect(h.x - handleSize / 2, h.y - handleSize / 2, handleSize, handleSize);
+        ctx.strokeRect(h.x - handleSize / 2, h.y - handleSize / 2, handleSize, handleSize);
+      });
+    }
+
+    // Stage Interaction Logic (Pan & Crop Box Manipulation)
+    stageContainer.addEventListener('mousedown', handlePointerDown);
+    window.addEventListener('mousemove', handlePointerMove);
+    window.addEventListener('mouseup', handlePointerUp);
+
+    // Touch support
+    stageContainer.addEventListener('touchstart', (e) => {
+      const touch = e.touches[0];
+      handlePointerDown({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => e.preventDefault() });
+    }, { passive: false });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging && !isCropDragging) return;
+      const touch = e.touches[0];
+      handlePointerMove({ clientX: touch.clientX, clientY: touch.clientY });
+    });
+
+    window.addEventListener('touchend', handlePointerUp);
+
+    // Mouse Wheel Zoom
+    stageContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+      zoomLevel = Math.min(Math.max(zoomLevel * zoomFactor, 0.2), 3);
+      zoomRange.value = zoomLevel;
+      zoomVal.textContent = `${zoomLevel.toFixed(2)}x`;
+      renderViewport();
+      scheduleProcess();
+    }, { passive: false });
+
+    function getMousePosOnStage(e) {
+      const rect = stageContainer.getBoundingClientRect();
+      return {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      };
+    }
+
+    function getHitHandle(pos) {
+      const r = 12;
+      if (Math.abs(pos.x - cropBox.x) < r && Math.abs(pos.y - cropBox.y) < r) return 'tl';
+      if (Math.abs(pos.x - (cropBox.x + cropBox.w)) < r && Math.abs(pos.y - cropBox.y) < r) return 'tr';
+      if (Math.abs(pos.x - cropBox.x) < r && Math.abs(pos.y - (cropBox.y + cropBox.h)) < r) return 'bl';
+      if (Math.abs(pos.x - (cropBox.x + cropBox.w)) < r && Math.abs(pos.y - (cropBox.y + cropBox.h)) < r) return 'br';
+      
+      // Inside crop box?
+      if (pos.x > cropBox.x && pos.x < cropBox.x + cropBox.w && pos.y > cropBox.y && pos.y < cropBox.y + cropBox.h) {
+        return 'box-move';
+      }
+      return 'image-pan';
+    }
+
+    function handlePointerDown(e) {
+      if (!imageLoaded) return;
+      const pos = getMousePosOnStage(e);
+      activeHandle = getHitHandle(pos);
+
+      cropStart = {
+        x: pos.x,
+        y: pos.y,
+        boxX: cropBox.x,
+        boxY: cropBox.y,
+        boxW: cropBox.w,
+        boxH: cropBox.h
+      };
+
+      if (activeHandle === 'image-pan') {
+        isDragging = true;
+        startDragX = pos.x - panX;
+        startDragY = pos.y - panY;
+      } else {
+        isCropDragging = true;
+      }
+    }
+
+    function handlePointerMove(e) {
+      const pos = getMousePosOnStage(e);
+
+      // Update cursor
+      if (!isDragging && !isCropDragging) {
+        const handle = getHitHandle(pos);
+        if (handle === 'tl' || handle === 'br') stageContainer.style.cursor = 'nwse-resize';
+        else if (handle === 'tr' || handle === 'bl') stageContainer.style.cursor = 'nesw-resize';
+        else if (handle === 'box-move') stageContainer.style.cursor = 'move';
+        else stageContainer.style.cursor = 'grab';
+      }
+
+      if (isDragging) {
+        panX = pos.x - startDragX;
+        panY = pos.y - startDragY;
+        renderViewport();
+        return;
+      }
+
+      if (isCropDragging) {
+        const dx = pos.x - cropStart.x;
+        const dy = pos.y - cropStart.y;
+        const targetW = parseInt(targetWidthInput.value) || 140;
+        const targetH = parseInt(targetHeightInput.value) || 60;
+        const ratio = targetW / targetH;
+        const lock = lockAspectCheck.checked;
+
+        if (activeHandle === 'box-move') {
+          cropBox.x = cropStart.boxX + dx;
+          cropBox.y = cropStart.boxY + dy;
+        } else if (activeHandle === 'br') {
+          let newW = Math.max(cropStart.boxW + dx, 50);
+          let newH = lock ? newW / ratio : Math.max(cropStart.boxH + dy, 30);
+          cropBox.w = newW;
+          cropBox.h = newH;
+        } else if (activeHandle === 'tl') {
+          let newW = Math.max(cropStart.boxW - dx, 50);
+          let newH = lock ? newW / ratio : Math.max(cropStart.boxH - dy, 30);
+          cropBox.x = cropStart.boxX + (cropStart.boxW - newW);
+          cropBox.y = cropStart.boxY + (cropStart.boxH - newH);
+          cropBox.w = newW;
+          cropBox.h = newH;
+        } else if (activeHandle === 'tr') {
+          let newW = Math.max(cropStart.boxW + dx, 50);
+          let newH = lock ? newW / ratio : Math.max(cropStart.boxH - dy, 30);
+          cropBox.y = cropStart.boxY + (cropStart.boxH - newH);
+          cropBox.w = newW;
+          cropBox.h = newH;
+        } else if (activeHandle === 'bl') {
+          let newW = Math.max(cropStart.boxW - dx, 50);
+          let newH = lock ? newW / ratio : Math.max(cropStart.boxH + dy, 30);
+          cropBox.x = cropStart.boxX + (cropStart.boxW - newW);
+          cropBox.w = newW;
+          cropBox.h = newH;
+        }
+
+        renderViewport();
+      }
+    }
+
+    function handlePointerUp() {
+      if (isDragging || isCropDragging) {
+        isDragging = false;
+        isCropDragging = false;
+        activeHandle = null;
+        scheduleProcess();
+      }
+    }
+
+    // Debounce rendering/exporting pipeline
+    let processTimeout = null;
+    function scheduleProcess() {
+      clearTimeout(processTimeout);
+      processTimeout = setTimeout(processAndExport, 80);
+    }
+
+    // Main Image Extraction & Binary Padder Engine
+    function processAndExport() {
+      if (!imageLoaded || !sourceImage) return;
+
+      const targetW = parseInt(targetWidthInput.value) || 140;
+      const targetH = parseInt(targetHeightInput.value) || 60;
+      const targetKb = parseFloat(targetKbInput.value) || 36;
+      const targetBytes = Math.floor(targetKb * 1024);
+
+      // Create an offscreen rendering canvas matching exact output dimensions
+      const exportCanvas = document.createElement('canvas');
+      exportCanvas.width = targetW;
+      exportCanvas.height = targetH;
+      const expCtx = exportCanvas.getContext('2d');
+
+      // 1. Fill base with crisp white
+      expCtx.fillStyle = '#ffffff';
+      expCtx.fillRect(0, 0, targetW, targetH);
+
+      // 2. Map Viewport Crop coordinates to Image pixels
+      const stageRect = stageContainer.getBoundingClientRect();
+      const stageCenterX = stageRect.width / 2;
+      const stageCenterY = stageRect.height / 2;
+
+      // Transform from export canvas (0..targetW, 0..targetH) back through cropBox and viewport transforms
+      expCtx.save();
+      // Scale up from crop box dimensions to target dimensions
+      const scaleX = targetW / cropBox.w;
+      const scaleY = targetH / cropBox.h;
+      expCtx.scale(scaleX, scaleY);
+      expCtx.translate(-cropBox.x, -cropBox.y);
+
+      // Re-apply viewport image transformations
+      expCtx.translate(stageCenterX + panX, stageCenterY + panY);
+      expCtx.rotate((rotationDeg * Math.PI) / 180);
+      expCtx.scale(zoomLevel, zoomLevel);
+      expCtx.drawImage(sourceImage, -sourceImage.width / 2, -sourceImage.height / 2);
+      expCtx.restore();
+
+      // 3. Pixel Manipulation: Contrast, Brightness, Greyscale, and B/W Threshold
+      const imgData = expCtx.getImageData(0, 0, targetW, targetH);
+      const data = imgData.data;
+
+      const contrast = parseFloat(contrastRange.value) / 100;
+      const brightness = parseFloat(brightnessRange.value) / 100;
+      const threshold = parseInt(thresholdRange.value);
+      const isGreyscale = greyscaleCheck.checked;
+
+      for (let i = 0; i < data.length; i += 4) {
+        let r = data[i];
+        let g = data[i + 1];
+        let b = data[i + 2];
+
+        // Brightness & Contrast adjustment
+        r = ((r / 255 - 0.5) * contrast + 0.5) * 255 * brightness;
+        g = ((g / 255 - 0.5) * contrast + 0.5) * 255 * brightness;
+        b = ((b / 255 - 0.5) * contrast + 0.5) * 255 * brightness;
+
+        // Grayscale conversion (ITU-R BT.601)
+        if (isGreyscale || threshold > 0) {
+          const gray = 0.299 * r + 0.587 * g + 0.114 * b;
+          if (threshold > 0) {
+            // Force clean binarization: pixels lighter than threshold become pure white (255)
+            const val = gray > threshold ? 255 : 0;
+            r = g = b = val;
+          } else {
+            r = g = b = gray;
+          }
+        }
+
+        data[i] = Math.min(255, Math.max(0, r));
+        data[i + 1] = Math.min(255, Math.max(0, g));
+        data[i + 2] = Math.min(255, Math.max(0, b));
+      }
+      expCtx.putImageData(imgData, 0, 0);
+
+      // 4. Optional Outer Box Border (e.g. 50mm x 20mm box guideline)
+      if (drawBorderCheck.checked) {
+        expCtx.lineWidth = 1;
+        expCtx.strokeStyle = '#000000';
+        expCtx.strokeRect(0.5, 0.5, targetW - 1, targetH - 1);
+      }
+
+      // 5. Binary Conversion & Safe JPEG Marker (0xFF 0xFE) COM Padding
+      exportCanvas.toBlob((blob) => {
+        const fileReader = new FileReader();
+        fileReader.onloadend = () => {
+          const arrayBuffer = fileReader.result;
+          const originalBytes = new Uint8Array(arrayBuffer);
+
+          let finalBytes = originalBytes;
+          const currentSize = originalBytes.length;
+          const paddingNeeded = targetBytes - currentSize;
+
+          if (paddingNeeded > 4) {
+            // Standard JPEG layout: [Markers...] [Image Data] [EOI Marker: 0xFF, 0xD9]
+            // We inject a standard JPEG Comment Marker (COM: 0xFF, 0xFE)
+            // COM Marker Format: [0xFF, 0xFE] [2-byte Length (Payload + 2)] [Payload Bytes...]
+            
+            const payloadLength = paddingNeeded - 4; // 2 bytes for 0xFF 0xFE, 2 bytes for length
+            const markerLen = payloadLength + 2;
+            const highByte = (markerLen >> 8) & 0xff;
+            const lowByte = markerLen & 0xff;
+
+            // Safe filler bytes (ASCII '0' characters)
+            const commentPayload = new Uint8Array(payloadLength);
+            commentPayload.fill(0x30); // '0'
+
+            // Allocate padded buffer
+            finalBytes = new Uint8Array(currentSize + paddingNeeded);
+
+            // Copy original bytes except last 2 bytes (EOI 0xFF 0xD9)
+            finalBytes.set(originalBytes.subarray(0, originalBytes.length - 2), 0);
+
+            let offset = originalBytes.length - 2;
+            // Marker 0xFF 0xFE
+            finalBytes[offset++] = 0xff;
+            finalBytes[offset++] = 0xfe;
+            // Length
+            finalBytes[offset++] = highByte;
+            finalBytes[offset++] = lowByte;
+            // Payload
+            finalBytes.set(commentPayload, offset);
+            offset += payloadLength;
+            // Append EOI (End of Image) 0xFF 0xD9 at the very end
+            finalBytes[offset++] = 0xff;
+            finalBytes[offset++] = 0xd9;
+          }
+
+          // Create finalized object blob
+          if (currentBlobUrl) URL.revokeObjectURL(currentBlobUrl);
+          currentBlob = new Blob([finalBytes], { type: 'image/jpeg' });
+          currentBlobUrl = URL.createObjectURL(currentBlob);
+
+          // Update UI metrics & preview
+          finalPreviewImg.src = currentBlobUrl;
+          finalPreviewImg.style.width = `${targetW}px`;
+          finalPreviewImg.style.height = `${targetH}px`;
+
+          const sizeInKb = (finalBytes.length / 1024).toFixed(2);
+          metricDims.textContent = `${targetW} x ${targetH} px`;
+          metricSize.textContent = `${sizeInKb} KB`;
+          metricBytes.textContent = `${finalBytes.length.toLocaleString()} bytes`;
+          downloadSizeLabel.textContent = `${sizeInKb} KB`;
+
+          // Validation Badge
+          const kbNum = parseFloat(sizeInKb);
+          if (kbNum >= 30 && kbNum <= 50) {
+            complianceBadge.className = 'text-xs font-semibold px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 flex items-center gap-1';
+            complianceBadge.innerHTML = '✓ Passed (30KB–50KB)';
+            metricSize.className = 'font-bold text-emerald-600 dark:text-emerald-400';
+          } else {
+            complianceBadge.className = 'text-xs font-semibold px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300 border border-amber-300 dark:border-amber-800 flex items-center gap-1';
+            complianceBadge.innerHTML = '⚠ Out of Range';
+            metricSize.className = 'font-bold text-amber-600 dark:text-amber-400';
+          }
+        };
+        fileReader.readAsArrayBuffer(blob);
+      }, 'image/jpeg', 0.95);
+    }
+
+    // Download Trigger
+    downloadBtn.addEventListener('click', () => {
+      if (!currentBlobUrl) return;
+      let filename = fileNameInput.value.trim();
+      if (!filename.toLowerCase().endsWith('.jpg') && !filename.toLowerCase().endsWith('.jpeg')) {
+        filename += '.jpg';
+      }
+
+      const a = document.createElement('a');
+      a.href = currentBlobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
+
+    // Initial Setup
+    window.onload = () => {
+      resizeViewportCanvas();
+      handleDimensionChange();
+      // Automatically trigger sample so user has immediate preview
+      loadSampleBtn.click();
+    };
+  </script>
+</body>
+</html>
